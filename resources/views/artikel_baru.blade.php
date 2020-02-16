@@ -3,7 +3,7 @@
 @section('judul', 'Tambah Artikel')
 
 @section('content')
-    <form action="{{ route('artikel.simpanArtikel') }}" method="POST">
+    <form action="{{ route('artikel.simpanArtikel') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <label>Judul<label> <br>
         <input type="text" name="judul" placeholder="Masukkan Judul">
@@ -16,6 +16,9 @@
         <label>Status<label>
         <input type="radio" name="status" value="1">Aktif
         <input type="radio" name="status" value="0">Tidak Aktif
+        <br>
+        <br>
+        <input type="file" name="gambar" accept="image/jpeg,image/jpg,image/png">
         <br>
         <br>
         <input type="submit" name="submit" value="Submit">

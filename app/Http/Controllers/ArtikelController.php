@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Artikel;
+use Storage;
 
 class ArtikelController extends Controller
 {
@@ -14,8 +15,9 @@ class ArtikelController extends Controller
         // SELECT * FROM artikel;
         $artikel = Artikel::where('status', 1)
                             ->get();
+        $lokasi_gambar = Storage::disk('gambar_dir')->url('/');
 
-        return view('list_artikel', ['artikel' => $artikel]);
+        return view('list_artikel', ['artikel' => $artikel, 'lokasi_gambar' => $lokasi_gambar]);
     }
 
     function newArtikel()
@@ -34,6 +36,15 @@ class ArtikelController extends Controller
             $simpan = Artikel::where('id', $id)->first();
         }else{
             $simpan = new Artikel;
+        }
+        // dd($request->file('gambar'));
+        if($request->hasFile('gambar')) {
+            $gambar = $request->file('gambar');
+            $store = Storage::disk('gambar_dir')->put('/', $gambar);
+            // $store = Storage::disk('gambar_dir')->putFileAs('/', $gambar, $gambar->getClientOriginalName());
+
+
+            $simpan->gambar = basename($store);
         }
         $simpan->judul_artikel = $judul;
         $simpan->content_artikel = $konten;
@@ -57,6 +68,7 @@ class ArtikelController extends Controller
         $artikel = Artikel::find($id);
 
         if( $artikel->delete() ) {
+            Storage::disk('gambar_dir')->delete($artikel->gambar);
             return redirect()->route('artikel.index');
         }
     }

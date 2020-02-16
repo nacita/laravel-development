@@ -47,7 +47,8 @@ Route::get('ambil-url', function() {
     return route('post.ar1');
 });
 
-Route::get('tes-controller/{nama}', 'TesController@coba');
+// Route::get('tes-controller/{nama}', 'TesController@coba');
+Route::get('tes-controller/provinsi', 'TesController@provinsi');
 Route::get('tes-view/{nama}', 'TesController@cobaview');
 
 Route::prefix('artikel')->name('artikel.')->group(function () {
